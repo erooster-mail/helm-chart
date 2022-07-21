@@ -13,13 +13,17 @@ A Helm chart for the erooster mailserver
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.pullSecrets | list | `[]` | Optionally specify an array of imagePullSecrets. Secrets must be manually created in the namespace. ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/ |
 | image.repository | string | `"mtrnord/erooster"` | Image location to download erooster from |
-| image.tag | string | `""` | Overrides the image tag whose default is the chart appVersion. |
+| image.tag | string | `"main"` | Overrides the image tag whose default is the chart appVersion. |
 | ingress.annotations | object | `{}` | Annotations to apply to the created ingress resource. |
 | ingress.className | string | `""` | Set the name of the IngressClass cluster resource (optional) |
-| ingress.enableTraefikTCPIngress | bool | `false` | Enable ingress for the mail ports (Only supporting traefik) |
 | ingress.enabled | bool | `false` | Enable the ingress |
 | ingress.hosts | list | `[{"host":"chart-example.local","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}]` | Hosts to listen on. |
 | ingress.tls | list | `[]` | TLS Secrets for this domain. This is required to match the tls secret for the server itself. |
+| mailService.imapEncryptedPort | int | `993` | Port for the imap server (encrypted) |
+| mailService.imapPort | int | `143` | Port for the imap server (unencrypted) |
+| mailService.smtpEncryptedPort | int | `465` | Port for the smtp server (encrypted) |
+| mailService.smtpPort | int | `25` | Port for the smtp server (unencrypted) |
+| mailService.type | string | `"Loadbalancer"` | Type of the Mail Service |
 | nameOverride | string | `""` | Override part of the installed name, will still keep release name. |
 | nodeSelector | object | `{}` |  |
 | podAnnotations | object | `{}` | Additional annotations for the pods |
@@ -28,11 +32,7 @@ A Helm chart for the erooster mailserver
 | resources | object | `{}` | Setup resource limits and requests |
 | securityContext | object | `{}` | Security context for the deployment |
 | service.httpPort | int | `80` | Port for the http server |
-| service.imapEncryptedPort | int | `993` | Port for the imap server (encrypted) |
-| service.imapPort | int | `143` | Port for the imap server (unencrypted) |
-| service.smtpEncryptedPort | int | `465` | Port for the smtp server (encrypted) |
-| service.smtpPort | int | `25` | Port for the smtp server (unencrypted) |
-| service.type | string | `"ClusterIP"` | Type of the Serive |
+| service.type | string | `"ClusterIP"` | Type of the HTTP Service |
 | tolerations | list | `[]` |  |
 
 ----------------------------------------------

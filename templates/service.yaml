@@ -1,7 +1,8 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "erooster.fullname" . }}
+  name: {{ include "erooster.fullname" . }}-http
   labels:
     {{- include "erooster.labels" . | nindent 4 }}
 spec:
@@ -11,16 +12,28 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
-    - port: {{ .Values.service.smtpPort }}
+  selector:
+    {{- include "erooster.selectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "erooster.fullname" . }}-mail
+  labels:
+    {{- include "erooster.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.mailService.type }}
+  ports:
+    - port: {{ .Values.mailService.smtpPort }}
       targetPort: smtp
       name: smtp
-    - port: {{ .Values.service.smtpEncryptedPort }}
+    - port: {{ .Values.mailService.smtpEncryptedPort }}
       targetPort: smtp-encrypted
       name: smtp-encrypted
-    - port: {{ .Values.service.imapPort }}
+    - port: {{ .Values.mailService.imapPort }}
       targetPort: imap
       name: imap
-    - port: {{ .Values.service.imapEncryptedPort }}
+    - port: {{ .Values.mailService.imapEncryptedPort }}
       targetPort: imap-encrypted
       name: imap-encrypted
   selector:
