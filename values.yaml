@@ -1,25 +1,33 @@
 # Default values for erooster.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
 
+# -- Amount of replicas. WARNING: Currently erooster doesnt support horizontal scaling properly.
 replicaCount: 1
 
 image:
+  # -- Image location to download erooster from
   repository: mtrnord/erooster
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
+  # -- Overrides the image tag whose default is the chart appVersion.
   tag: ""
+  # -- Optionally specify an array of imagePullSecrets.
+  # Secrets must be manually created in the namespace.
+  # ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  pullSecrets: []
 
-imagePullSecrets: []
+# -- Override part of the installed name, will still keep release name.
 nameOverride: ""
+# -- Override the full name of the installed chart.
 fullnameOverride: ""
 
+# -- Additional annotations for the pods
 podAnnotations: {}
 
+# -- Security context for the pods
 podSecurityContext:
   {}
   # fsGroup: 2000
 
+# -- Security context for the deployment
 securityContext:
   {}
   # capabilities:
@@ -30,30 +38,42 @@ securityContext:
   # runAsUser: 1000
 
 service:
+  # -- Type of the Serive
   type: ClusterIP
+  # -- Port for the http server
   httpPort: 80
-  smtpPort: 80
+  # -- Port for the smtp server (unencrypted)
+  smtpPort: 25
+  # -- Port for the smtp server (encrypted)
   smtpEncryptedPort: 465
+  # -- Port for the imap server (unencrypted)
   imapPort: 143
+  # -- Port for the imap server (encrypted)
   imapEncryptedPort: 993
 
 ingress:
+  # -- Enable the ingress
   enabled: false
+  # -- Enable ingress for the mail ports (Only supporting traefik)
+  enableTraefikTCPIngress: false
+  # -- Set the name of the IngressClass cluster resource (optional)
   className: ""
-  annotations:
-    {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  # -- Annotations to apply to the created ingress resource.
+  annotations: {}
+
+  # -- Hosts to listen on.
   hosts:
     - host: chart-example.local
       paths:
         - path: /
           pathType: ImplementationSpecific
+  # -- TLS Secrets for this domain. This is required to match the tls secret for the server itself.
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
 
+# -- Setup resource limits and requests
 resources:
   {}
   # We usually recommend not to specify default resources and to leave this as a conscious
