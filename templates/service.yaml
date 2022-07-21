@@ -7,9 +7,21 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
+    - port: {{ .Values.service.httpPort }}
       targetPort: http
       protocol: TCP
       name: http
+    - port: {{ .Values.service.smtpPort }}
+      targetPort: smtp
+      name: smtp
+    - port: {{ .Values.service.smtpEncryptedPort }}
+      targetPort: smtp-encrypted
+      name: smtp-encrypted
+    - port: {{ .Values.service.imapPort }}
+      targetPort: imap
+      name: imap
+    - port: {{ .Values.service.imapEncryptedPort }}
+      targetPort: imap-encrypted
+      name: imap-encrypted
   selector:
     {{- include "erooster.selectorLabels" . | nindent 4 }}

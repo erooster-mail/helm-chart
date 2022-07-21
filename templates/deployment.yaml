@@ -31,6 +31,14 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
+            - name: imap
+              containerPort: 143
+            - name: imap-encrypted
+              containerPort: 993
+            - name: smtp
+              containerPort: 25
+            - name: smtp-encrypted
+              containerPort: 465
             - name: http
               containerPort: 80
               protocol: TCP
